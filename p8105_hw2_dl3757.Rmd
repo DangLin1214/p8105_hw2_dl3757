@@ -1,0 +1,16 @@
+---
+title: "p8105_hw2_dl3757"
+author: "Dang Lin dl3757"
+date: "2024-10-02"
+output:
+ pdf_document: default
+---
+
+```{r, message = FALSE}
+# Import the libraries
+library(tidyverse)
+library(readxl)
+```
+
+
+
