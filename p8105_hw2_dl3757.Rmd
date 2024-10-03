@@ -87,3 +87,35 @@ nrow(distinct_A_ada)
 ```
 
 Of these 60 distinct stations that serve the A train, 17 stations are ADA-compliant.
+
+# Problem 2
+```{r}
+# Load and clean the dataset "Mr. Trash Wheel"
+mr_trash_wheel <- read_excel("./202409 Trash Wheel Collection Data.xlsx", 
+                          sheet = "Mr. Trash Wheel", range = "A2:N655") %>% 
+  janitor::clean_names() %>% 
+  drop_na(dumpster) %>% 
+  mutate(sports_balls = as.integer(round(sports_balls, 0))) %>% 
+  mutate(year = as.character(year)) %>% 
+  mutate(sheet = "Mr.")
+```
+
+```{r}
+# Load and clean the dataset "Professor Trash Wheel"
+professor_trash_wheel <- read_excel("./202409 Trash Wheel Collection Data.xlsx", 
+                          sheet = "Professor Trash Wheel", range = "A2:M123") %>% 
+  janitor::clean_names() %>% 
+  drop_na(dumpster) %>% 
+  mutate(year = as.character(year)) %>% 
+  mutate(sheet = "Professor")
+```
+
+```{r}
+# Load and clean the dataset "Gwynnda Trash Wheel"
+gwynnda_trash_wheel <- read_excel("./202409 Trash Wheel Collection Data.xlsx", 
+                          sheet = "Gwynnda Trash Wheel", range = "A2:L266") %>% 
+  janitor::clean_names() %>% 
+  drop_na(dumpster) %>% 
+  mutate(year = as.character(year)) %>% 
+  mutate(sheet = "Gwynnda")
+```
