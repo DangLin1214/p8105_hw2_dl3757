@@ -203,3 +203,25 @@ knitr::kable(table, caption = "Winner and Star Bakers")
 ```
 
 If a baker frequently earns STAR BAKER across episodes within a specific series, they are more likely to become the final WINNER of that series. From this table, we can observe that Nadiya and Rahul were predictable winners because they consistently achieved STAR BAKER during their series. However, despite Richard, Ian, and Steph earning STAR BAKER the most times in their respective series, they unfortunately did not win the final title.
+
+```{r, message = FALSE}
+# Import the viewership data
+viewers <- read_csv("/Users/apple/Desktop/P8105_hw2_dl3757/gbb_datasets/viewers.csv") %>% 
+  janitor::clean_names()
+
+# View the first 10 rows of the dataset
+viewers_10 <- head(viewers, 10)
+knitr::kable(viewers_10) 
+```
+
+```{r}
+# Calculate the average viewership for Season 1 and 5
+viewership_avg <- viewers %>%
+  summarise(`Average Viewership Season 1` = mean(series_1, na.rm = TRUE), 
+            `Average Viewership Season 5` = mean(series_5, na.rm = TRUE))
+
+knitr::kable(viewership_avg, 
+             caption = "Average Viewership in Season 1 and 5")
+```
+
+The average viewership in Season 1 is 2.77, and the average viewership in Season 5 is 10.0393.
