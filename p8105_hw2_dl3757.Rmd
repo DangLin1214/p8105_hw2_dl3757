@@ -157,3 +157,26 @@ bakers_bakes <- anti_join(bakers, bakes, by = "baker")
 
 bakes_results <- anti_join(bakes, results, by = c("series", "episode"))
 ```
+
+```{r, message = FALSE}
+# Produce a single tidy dataset by merging different datasets
+baker_tidy_1 <- left_join(bakes, bakers) %>% 
+  janitor::clean_names() %>% 
+  select(baker, series, episode, everything())
+
+baker_tidy_2 <- right_join(bakers, results) %>% 
+  janitor::clean_names() %>% 
+  select(baker, series, episode, result, everything()) %>% 
+  arrange(baker)
+
+baker_tidy_3 <- right_join(baker_tidy_1, baker_tidy_2) %>% 
+  janitor::clean_names() %>% 
+  select(baker, series, episode, result, everything()) %>% 
+  arrange(baker)
+
+# Export the CSV
+write_csv(baker_tidy_3, 
+          "/Users/apple/Desktop/P8105_hw2_dl3757/gbb_datasets/bake_tidy_data.csv")
+```
+
+Firstly, the three datasets—"bakers," "bakes," and "results"—were imported into R Studio using the read_csv() function. Then, the janitor::clean_names() function was applied to convert the variable names to a tidy and consistent format. For the "baker_name" column in the "baker" dataset, we created a new variable called "baker" that contains only the first names of the bakers, making it easier to merge the datasets in later steps. After creating the new variable, we used the select() function to rearrange the column positions and the arrange() function to order the rows by the bakers' names. Next, we checked the completeness and correctness of the datasets but chose not to remove any potentially overlapping rows and unmatched records. Subsequently, we used the left_join() and right_join() functions to combine the three datasets into a single tidy dataset. Finally, we saved this newly created merged dataset as a CSV file. The final dataset contains 1,136 observations and 10 variables, including "baker," "series," "episode," "results," and other relevant information for each baker. It is worth noting that the final dataset contains many missing values. However, we chose not to remove these values, as most of them will not affect our analysis.
