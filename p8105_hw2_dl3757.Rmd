@@ -180,3 +180,26 @@ write_csv(baker_tidy_3,
 ```
 
 Firstly, the three datasets—"bakers," "bakes," and "results"—were imported into R Studio using the read_csv() function. Then, the janitor::clean_names() function was applied to convert the variable names to a tidy and consistent format. For the "baker_name" column in the "baker" dataset, we created a new variable called "baker" that contains only the first names of the bakers, making it easier to merge the datasets in later steps. After creating the new variable, we used the select() function to rearrange the column positions and the arrange() function to order the rows by the bakers' names. Next, we checked the completeness and correctness of the datasets but chose not to remove any potentially overlapping rows and unmatched records. Subsequently, we used the left_join() and right_join() functions to combine the three datasets into a single tidy dataset. Finally, we saved this newly created merged dataset as a CSV file. The final dataset contains 1,136 observations and 10 variables, including "baker," "series," "episode," "results," and other relevant information for each baker. It is worth noting that the final dataset contains many missing values. However, we chose not to remove these values, as most of them will not affect our analysis.
+
+```{r}
+# Create a table showing the star baker or winner of each episode in Seasons 5 through 10
+star_baker <- baker_tidy_3 %>% 
+  janitor::clean_names() %>%
+  filter(result == c("STAR BAKER"), 
+         series >= 5 & series <= 10) %>%
+  arrange(series, episode) %>% 
+  select(series, episode, baker, result)
+
+winner <- baker_tidy_3 %>% 
+  janitor::clean_names() %>%
+  filter(result == c("WINNER"), 
+         series >= 5 & series <= 10) %>%
+  arrange(series, episode) %>% 
+  select(series, episode, baker, result)
+
+table <- bind_rows(winner, star_baker)
+
+knitr::kable(table, caption = "Winner and Star Bakers")
+```
+
+If a baker frequently earns STAR BAKER across episodes within a specific series, they are more likely to become the final WINNER of that series. From this table, we can observe that Nadiya and Rahul were predictable winners because they consistently achieved STAR BAKER during their series. However, despite Richard, Ian, and Steph earning STAR BAKER the most times in their respective series, they unfortunately did not win the final title.
