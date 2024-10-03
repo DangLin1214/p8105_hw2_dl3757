@@ -12,5 +12,18 @@ library(tidyverse)
 library(readxl)
 ```
 
+# Problem 1
+```{r, message = FALSE}
+# Read the csv file and clean the dataset
+nyc_transit <- read_csv("./NYC_Transit_Subway_Entrance_And_Exit_Data.csv", 
+                        na = c("NA", ".", "")) %>% 
+  janitor::clean_names() %>% 
+  select(line, station_name, station_latitude, 
+         station_longitude, route1:route11, entry, vending, 
+         entrance_type, ada) %>% 
+  mutate(across(starts_with("route"), as.character)) %>%
+  mutate(entry = case_match(entry, "YES" ~ TRUE, "NO" ~ FALSE))
+```
 
+Firstly, we read the CSV file and applied the janitor::clean_names() function to make all the variable names tidy and consistent in format. Next, we used the select() function to choose the necessary variables from the original dataset and rearranged the position of each column. After that, we converted all the route columns to character variables. Finally, we transformed the "entry" variable from a character to a logical variable using the case_match() function. After these data-cleaning steps, the dataset contains 1,868 observations and 19 variables, meaning the cleaned dataset has 1,868 rows and 19 columns. For instance, variables such as "station_name," "line," "station_latitude," "station_longitude," and different routes are included. This dataset is not entirely tidy because it contains a lot of missing values, which we may need to address by removing some of them depending on the analysis. Additionally, some route variables were not initially in the correct format, so converting them to character variables was necessary before performing further analysis.
 
