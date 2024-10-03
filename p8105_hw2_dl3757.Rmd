@@ -130,3 +130,30 @@ tidy_dataset =
 ```
 
 After a series of data cleaning steps, the Mr. Trash Wheel dataset contains 651 observations and 15 variables, the Professor Trash Wheel dataset incorporates 119 observations and 14 variables, and the Gwynnda Trash Wheel dataset includes 263 observations and 13 variables. It is worth mentioning that most of the values in the "Wrappers" column of the Gwynnda Trash Wheel dataset are listed as "NA". However, we did not omit the rows without values for "Wrappers" because doing so would result in the loss of many informative observations. Subsequently, we combined the three datasets into one to perform a more comprehensive analysis. The resulting tidy dataset contains 1033 observations and 15 variables, with each observation labeled according to its source sheet. This combined dataset includes important variables such as "weight_tons", "volume_cubic_yards", "plastic_bottles", and others, with data collected between 2014 and 2024. The total weight of trash collected by Professor Trash Wheel is `r sum(tidy_dataset$weight_tons[tidy_dataset$sheet == "Professor"], na.rm = TRUE)` based on available data. Moreover, the total number of cigarette butts collected by Gwynnda in June of 2022 is `r sum(tidy_dataset$cigarette_butts[tidy_dataset$sheet == "Gwynnda" & format(tidy_dataset$date, "%Y-%m") == "2022-06"])`.
+
+# Problem 3
+```{r message = FALSE}
+# Load and clean the dataset
+bakers <- read_csv("/Users/apple/Desktop/P8105_hw2_dl3757/gbb_datasets/bakers.csv") %>%
+  janitor::clean_names() %>% 
+  mutate(baker = sub(" .*", "", baker_name)) %>% 
+  select(baker, everything(), -baker_name) %>% 
+  arrange(baker)
+
+bakes <- read_csv("/Users/apple/Desktop/P8105_hw2_dl3757/gbb_datasets/bakes.csv") %>%
+  janitor::clean_names() %>% 
+  select(baker, series, everything()) %>% 
+  arrange(baker)
+
+results <- read_csv("/Users/apple/Desktop/P8105_hw2_dl3757/gbb_datasets/results.csv", 
+                    skip = 2) %>%
+  janitor::clean_names() %>% 
+  arrange(baker)
+```
+
+```{r}
+# Check for completeness and correctness
+bakers_bakes <- anti_join(bakers, bakes, by = "baker")
+
+bakes_results <- anti_join(bakes, results, by = c("series", "episode"))
+```
